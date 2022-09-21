@@ -6,6 +6,8 @@ import com.joaocigana.mongoapi.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,6 +23,10 @@ public class PostService {
 
     public List<Post> findPostByTitle(String text){
         return postRepository.searchTitle(text);
+    }
+
+    public List<Post> searchByTextInDateRange(String text, LocalDateTime inicialDate, LocalDateTime finalDate){
+        return postRepository.searchByTextInDateRange(text, inicialDate, finalDate);
     }
 
 }

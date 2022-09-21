@@ -7,11 +7,13 @@ import com.joaocigana.mongoapi.entities.User;
 import com.joaocigana.mongoapi.services.PostService;
 import com.joaocigana.mongoapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,5 +34,15 @@ public class PostController {
         return ResponseEntity.ok().body(postService.findPostByTitle(text));
     }
 
+    @GetMapping(value = "/fullsearch")
+    public ResponseEntity<List<Post>> searchByTextInDateRange(
+            @RequestParam(value = "text", defaultValue = "") String text,
+            @RequestParam(value = "minDate", defaultValue = "") String min,
+            @RequestParam(value = "maxDate", defaultValue = "") String max){
+        text = URL.decodeParam(text);
+        LocalDateTime minDate = URL.convertDate(min, LocalDateTime.of(1970, 1, 1, 00, 00));
+        LocalDateTime maxDate = URL.convertDate(max, LocalDateTime.now());
+        return ResponseEntity.ok().body(postService.searchByTextInDateRange(text, minDate, maxDate));
+    }
 
 }
